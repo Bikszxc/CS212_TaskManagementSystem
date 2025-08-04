@@ -28,5 +28,23 @@ public class Main {
             System.out.println(t);
         }
 
+        tm.toggleTaskStatus(1);
+
+        for (Tasks t : tm.getTasks()) {
+            System.out.println(t);
+        }
+
+        tm.undo();
+
+        for (Tasks t : tm.getTasks()) {
+            System.out.println(t);
+        }
+
+        tm.redo();
+
+        for (Tasks t : tm.getTasks()) {
+            System.out.println(t);
+        }
+
     }
 }
