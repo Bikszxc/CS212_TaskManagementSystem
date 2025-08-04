@@ -1,10 +1,12 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Tasks {
     private int id;
     private String title, description;
-    private LocalDate dueDate, creationTime;
+    private LocalDate dueDate;
+    private LocalDateTime creationTime;
     private boolean completed, archived;
     private Priority priority;
 
@@ -26,13 +28,13 @@ public class Tasks {
         }
     }
 
-    public Tasks(int id, String title, String description, int days, Priority priority) {
+    public Tasks(int id, String title, String description, LocalDate dueDate, Priority priority) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.dueDate = LocalDate.now().plusDays(days);
+        this.dueDate = dueDate;
         this.priority = priority;
-        this.creationTime = LocalDate.now();
+        this.creationTime = LocalDateTime.now();
         this.completed = false;
         this.archived = false;
     }
@@ -63,7 +65,7 @@ public class Tasks {
     public Priority getPriority() {return priority;}
     public void setPriority(Priority priority) {this.priority = priority;}
 
-    public LocalDate getCreationTime() {return creationTime;}
+    public LocalDateTime getCreationTime() {return creationTime;}
 
     public boolean isCompleted() {return completed;}
     public void setCompleted(boolean completed) {this.completed = completed;}
@@ -84,6 +86,7 @@ public class Tasks {
                 ", dueDate=" + getFormattedDate() +
                 ", priority=" + priority +
                 ", completed=" + completed +
+                ", creationTime=" + creationTime +
                 "}";
     }
 }
