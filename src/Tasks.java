@@ -37,6 +37,17 @@ public class Tasks {
         this.archived = false;
     }
 
+    public Tasks(Tasks other) {
+        this.id = other.id;
+        this.title = other.title;
+        this.description = other.description;
+        this.dueDate = other.dueDate;
+        this.priority = other.priority;
+        this.creationTime = other.creationTime;
+        this.completed = other.completed;
+        this.archived = other.archived;
+    }
+
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
 
@@ -72,6 +83,7 @@ public class Tasks {
                 ", desc=" + description +
                 ", dueDate=" + getFormattedDate() +
                 ", priority=" + priority +
+                ", completed=" + completed +
                 "}";
     }
 }
