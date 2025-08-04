@@ -1,5 +1,6 @@
 import java.util.Stack;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class TaskManager {
     // This is where we keep all our tasks - like a big list!
@@ -125,9 +126,9 @@ public class TaskManager {
     }
 
     // ADD TASK METHOD - creates a new task and adds it to our list
-    public void addTask(String title, String description, int days, Tasks.Priority priority) {
+    public void addTask(String title, String description, String dueDate, Tasks.Priority priority) {
         // Create the new task with current nextId
-        Tasks task = new Tasks(nextId, title, description, days, priority);
+        Tasks task = new Tasks(nextId, title, description, LocalDate.parse(dueDate), priority);
         System.out.println(task); // Show what we created
 
         // Add it to our task list
@@ -204,5 +205,86 @@ public class TaskManager {
     // GETTER METHOD - returns our task list so other classes can see it
     public ArrayList<Tasks> getTasks() {
         return tasks;
+    }
+
+    // This method starts an update process for a task by ID
+    // It returns a TaskUpdater object to help set new values step-by-step
+    public TaskUpdater updateTask(int id) {
+        return new TaskUpdater(id);
+    }
+
+    // This inner class helps update a task's fields bit by bit
+    // You can chain methods like title(...).description(...).apply()
+    public class TaskUpdater {
+        private int taskId;
+        private String newTitle;
+        private String newDescription;
+        private LocalDate newDueDate;
+        private Tasks.Priority newPriority;
+
+        // Constructor takes the task ID we want to update
+        public TaskUpdater(int id) {
+            this.taskId = id;
+        }
+
+        // Set new title and return this updater for chaining
+        public TaskUpdater title(String title) {
+            this.newTitle = title;
+            return this;
+        }
+
+        // Set new description and return this updater for chaining
+        public TaskUpdater description(String description) {
+            this.newDescription = description;
+            return this;
+        }
+
+        // Set new dueDate and return this updater for chaining
+        public TaskUpdater dueDate(LocalDate dueDate) {
+            this.newDueDate = dueDate;
+            return this;
+        }
+
+        // Set new priority and return this updater for chaining
+        public TaskUpdater priority(Tasks.Priority priority) {
+            this.newPriority = priority;
+            return this;
+        }
+
+        // Apply the changes to the task with matching ID
+        // Returns true if successful, false if task not found
+        public boolean apply() {
+            // Look through tasks to find the one with this ID
+            for (Tasks task : tasks) {
+                if (task.getId() == taskId) {
+                    Tasks oldTask = new Tasks(task);
+
+                    // Update fields only if new values were provided
+                    if (newTitle != null) {
+                        task.setTitle(newTitle);
+                    }
+
+                    if (newDescription != null) {
+                        task.setDescription(newDescription);
+                    }
+
+                    if (newDueDate != null) {
+                        task.setDueDate(newDueDate);
+                    }
+
+                    if (newPriority != null) {
+                        task.setPriority(newPriority);
+                    }
+
+                    // Record this update so it can be undone/redone
+                    Action updateAction = new Action(Action.ActionType.UPDATE, oldTask, task);
+                    performAction(updateAction);
+
+                    System.out.println("Updated task ID " + taskId);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
