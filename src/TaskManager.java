@@ -11,6 +11,7 @@ public class TaskManager {
     // redoStack = pile of actions we can redo (most recent on top)
     private Stack<Action> undoStack = new Stack<>();
     private Stack<Action> redoStack = new Stack<>();
+    private ArrayList<Tasks> archivedTask = new ArrayList<>();
 
     // This keeps track of what ID number to give the next task we create
     // Starts at 1, then 2, then 3, etc. so every task has a unique ID
@@ -184,6 +185,52 @@ public class TaskManager {
         return false; // Task with that ID not found
     }
 
+    // ARCHIVE TASK METHOD - archives all tasks with isCompleted = true
+    public void archiveCompletedTasks() {
+        // Create a list to store tasks that need to be archived
+        ArrayList<Tasks> tasksToArchive = new ArrayList<>();
+
+        // First pass: identify completed tasks
+        for (Tasks task : tasks) {
+            if (task.isCompleted()) {
+                tasksToArchive.add(task);
+            }
+        }
+
+        // Second pass: archive each completed task
+        for (Tasks task : tasksToArchive) {
+            // Find the current index of this task in the main list
+            int taskIndex = -1;
+            for (int i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getId() == task.getId()) {
+                    taskIndex = i;
+                    break;
+                }
+            }
+
+            if (taskIndex != -1) {
+                // Remove from main task list
+                tasks.remove(taskIndex);
+
+                // Add to archived tasks
+                archivedTask.add(task);
+
+                // Create archive action for undo/redo functionality
+                // Using DELETE action type since we're removing from main list
+                Action archiveAction = new Action(Action.ActionType.DELETE, task, taskIndex);
+                performAction(archiveAction);
+
+                System.out.println("Archived task ID " + task.getId() + ": " + task.getTitle());
+            }
+        }
+
+        if (tasksToArchive.isEmpty()) {
+            System.out.println("No completed tasks to archive");
+        } else {
+            System.out.println("Archived " + tasksToArchive.size() + " completed task(s)");
+        }
+    }
+
     // SORTING METHODS - these arrange tasks in different orders
 
     // Sort by priority (HIGH, MEDIUM, LOW)
@@ -208,8 +255,19 @@ public class TaskManager {
     }
 
     // GETTER METHOD - returns our task list so other classes can see it
-    public ArrayList<Tasks> getTasks() {
-        return tasks;
+    public ArrayList<Tasks> getTasks() {return tasks;}
+    public ArrayList<Tasks> getArchivedTasks() {
+        return archivedTask;
+    }
+    public ArrayList<Tasks> getCompletedTasks() {
+        ArrayList<Tasks> completedTasks = new ArrayList<>();
+        for (Tasks task : tasks) {
+            if (task.isCompleted()) {
+                completedTasks.add(task);
+            }
+        }
+
+        return completedTasks;
     }
 
     // This method starts an update process for a task by ID
