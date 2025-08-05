@@ -129,10 +129,12 @@ public class TaskManager {
     public void addTask(String title, String description, String dueDate, Tasks.Priority priority) {
         // Create the new task with current nextId
         Tasks task = new Tasks(nextId, title, description, LocalDate.parse(dueDate), priority);
-        System.out.println(task); // Show what we created
 
         // Add it to our task list
         tasks.add(task);
+
+        System.out.println("Adding Task ID " + task.getId() + " : " + task.getTitle());
+
         nextId++; // Increment for next task (so next one gets ID = nextId + 1)
 
         // Make this action undoable by recording it
@@ -186,20 +188,23 @@ public class TaskManager {
 
     // Sort by priority (HIGH, MEDIUM, LOW)
     public ArrayList<Tasks> sortByPriority(ArrayList<Tasks> taskList) {
-        taskList.sort((t1, t2) -> t1.getPriority().compareTo(t2.getPriority()));
-        return taskList;
+        ArrayList<Tasks> sortedTaskList = new ArrayList<>(taskList);
+        sortedTaskList.sort((t1, t2) -> t1.getPriority().compareTo(t2.getPriority()));
+        return sortedTaskList;
     }
 
     // Sort by due date (earliest first)
     public ArrayList<Tasks> sortByDueDate(ArrayList<Tasks> taskList) {
-        taskList.sort((t1, t2) -> t1.getDueDate().compareTo(t2.getDueDate()));
-        return taskList;
+        ArrayList<Tasks> sortedTaskList = new ArrayList<>(taskList);
+        sortedTaskList.sort((t1, t2) -> t1.getDueDate().compareTo(t2.getDueDate()));
+        return sortedTaskList;
     }
 
     // Sort by creation time (oldest first)
     public ArrayList<Tasks> sortByCreationTime(ArrayList<Tasks> taskList) {
-        taskList.sort((t1, t2) -> t1.getCreationTime().compareTo(t2.getCreationTime()));
-        return taskList;
+        ArrayList<Tasks> sortedTaskList = new ArrayList<>(taskList);
+        sortedTaskList.sort((t1, t2) -> t1.getCreationTime().compareTo(t2.getCreationTime()));
+        return sortedTaskList;
     }
 
     // GETTER METHOD - returns our task list so other classes can see it
