@@ -210,7 +210,7 @@ public class TaskManager {
 
             if (taskIndex != -1) {
                 // Remove from main task list
-                tasks.remove(taskIndex);
+                tasks.remove(taskIndex); // .
 
                 // Add to archived tasks
                 archivedTask.add(task);
