@@ -33,7 +33,7 @@ public class Main {
                 10);
 
         switch (sorting) {
-            case 1:
+            case 1: // Default Sorting
                 for (Tasks t : tm.getTasks()) {
 
                     System.out.printf(rowFormat,
@@ -45,7 +45,7 @@ public class Main {
                             t.isCompleted() ? "Yes" : "No");
                 }
                 break;
-            case 2:
+            case 2: // Priority Sorting
                 for (Tasks t : tm.sortByPriority(tm.getTasks())) {
 
                     System.out.printf(rowFormat,
@@ -57,7 +57,7 @@ public class Main {
                             t.isCompleted() ? "Yes" : "No");
                 }
                 break;
-            case 3:
+            case 3: // View Archived Tasks
                 for (Tasks t : tm.getArchivedTasks()) {
                     System.out.printf(rowFormat,
                             t.getId(),
@@ -68,7 +68,7 @@ public class Main {
                             t.isCompleted() ? "Yes" : "No");
                 }
                 break;
-            case 4:
+            case 4: // View Completed Tasks
                 for (Tasks t : tm.getCompletedTasks()) {
                     System.out.printf(rowFormat,
                             t.getId(),
