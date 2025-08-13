@@ -1,6 +1,7 @@
 import java.util.Stack;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class TaskManager {
     // This is where we keep all our tasks - like a big list!
@@ -129,7 +130,9 @@ public class TaskManager {
     // ADD TASK METHOD - creates a new task and adds it to our list
     public void addTask(String title, String description, String dueDate, Tasks.Priority priority) {
         // Create the new task with current nextId
-        Tasks task = new Tasks(nextId, title, description, LocalDate.parse(dueDate), priority);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        Tasks task = new Tasks(nextId, title, description, LocalDate.parse(dueDate, formatter), priority);
 
         // Add it to our task list
         tasks.add(task);
